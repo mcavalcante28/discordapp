@@ -1,43 +1,30 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
+const Enmap = require("enmap");
+const fs = require("fs");
 const client = new Discord.Client();
-const config = require('../config.json');
-const {format} = require('date-fns');
+const config = require("../config.json");
+client.config = config;
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity('ESTOU ONLINE!')
+fs.readdir('src/events', (err, files) => {
+  if (err) return console.error(err);
+  files.forEach(file => {
+    const event = require(`./events/${file}`);
+    let eventName = file.split(".")[0];
+    client.on(eventName, event.bind(null, client));
+  });
 });
 
-client.on('message', msg => {
+client.commands = new Enmap();
 
-  if (msg.content === '+ready') {
-    msg.channel.send('Ready go baby!!');
-  } 
-
-  if (msg.content === '+age'){
-    const followage = format(new Date(msg.member.joinedTimestamp), 'dd.MM.yyyy');
-    msg.reply(`Você está no canal desde ${followage}`);
-  }
-
-  if(msg.content === '+record_age'){
-    const timestamps = (msg.guild)
-    console.log(timestamps);
-  }
-
-  if(msg.content === '+server'){
-    const {memberCount, ownerID, name} = msg.guild;
-    const existTime = format(new Date(joinedTimestamp), 'dd.MM.yyyy');
-
-    ownerName = msg.guild.members.cache.get(ownerID).user.username;
-
-    msg.reply(`${name}: Este server pertence a: ${ownerName}. Contamos com ${memberCount} membros. Existe desde: ${existTime}`)
-  }
-});
-
-client.on("presenceUpdate", function(oldMember, newMember){
-  if(oldMember.clientStatus.desktop !== newMember.clientStatus.desktop){
-    console.log("MUDOU!")
-  }
+fs.readdir('src/commands', (err, files) => {
+  if (err) return console.error(err);
+  files.forEach(file => {
+    if (!file.endsWith(".js")) return;
+    let props = require(`./commands/${file}`);
+    let commandName = file.split(".")[0];
+    console.log(`carregando ${commandName}`);
+    client.commands.set(commandName, props);
+  });
 });
 
 client.login(config.token);
