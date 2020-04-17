@@ -16,13 +16,5 @@ exports.run = async (client, message) => {
     { name: 'Criado em:', value: `${format(new Date(message.guild.createdAt), 'dd.MM.yyyy')}`, inline: true },
     { name: 'Total de Membros:', value: `${message.guild.memberCount}`, inline: true },
 	)
-//     const list = [];
-//     message.guild.channels.cache.filter((channel, index) => {
-//       if(channel.type === 'voice'){
-//         list[index] = channel.id;
-//       }
-//     })
-
-// console.log(list)
 message.reply(exampleEmbed);
 }
