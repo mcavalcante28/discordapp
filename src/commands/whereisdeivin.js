@@ -4,11 +4,11 @@ var findRole;
 var memberTarget = {
   member: '',
   channel: '',
+  play: '',
 };
 
 exports.run = async (client, message) => {
 
-  console.log(client);
   message.guild.roles.cache.map(role =>{
     if(message.guild.roles.cache.get(role.id).name === targetRole){
         targetRoleID = role.id;
@@ -23,13 +23,25 @@ exports.run = async (client, message) => {
           if(findRole){
             memberTarget.name = member.user.username;
             memberTarget.channel = channel.name;
+            let game = member.user.presence.activities.filter(activity => activity.type === "PLAYING")
+            if(game){
+              game.map(game =>{
+                memberTarget.play = game.name;
+              })
+              game = 0;
+            }
           }
         })
       }
     })
     if(findRole){
-      message.reply(` Nosso querido ${memberTarget.name} está no canal ${memberTarget.channel}. Cumprimente-o!`)
-      findRole = 0;
+      if(memberTarget.play){
+        message.reply(` Nosso querido ${memberTarget.name} está no canal ${memberTarget.channel} jogando ${memberTarget.play}. Cumprimente-o!`)
+        findRole = 0;
+      } else{
+        message.reply(` Nosso querido ${memberTarget.name} está no canal ${memberTarget.channel}. Cumprimente-o!`)
+        findRole = 0;
+      }
     }else{
       message.reply(` Infelizmente quem você está procurando não está entre nós D:`)
     }
