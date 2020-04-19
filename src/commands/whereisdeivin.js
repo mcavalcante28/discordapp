@@ -11,14 +11,12 @@ var memberTarget = {
 exports.run = async (client, message) => {
 
   const args = message.content.slice(1).split(' ');
-  
   if(args.length === 2){
     targetRole = args[1];
     message.reply(`Você está rastreando a role ${targetRole}`)
   } else if(args.length === 1 && !targetRole){
     message.reply(`Você não digitou a role desejada`)
   } 
-
     if(targetRole){
       message.guild.roles.cache.map(role =>{
         if(message.guild.roles.cache.get(role.id).name === targetRole){
@@ -57,18 +55,5 @@ exports.run = async (client, message) => {
           message.reply(` Infelizmente quem você está procurando não está entre nós D:`)
         }
     }
-
-  // if(!targetRole && args[1]){
-  //   targetRole = args[1];
-  //   message.reply(`Você está rastreando a role ${targetRole}`)
-  // } 
-  // else if(!targetRole && !args[1]){
-  //   message.reply(`Você não digitou a role desejada`)
-  // } 
-  // else if(targetRole && args[1]){
-  //   targetRole = args[1];
-  //   message.reply(`Você alterou a role rastreada para ${targetRole}`)
-  // } 
-
 }
 
