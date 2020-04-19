@@ -1,19 +1,23 @@
 const {format, formatISO, compareAsc, getYear} = require('date-fns')
-
+const Discord = require("discord.js");
 let idMembers = [];
 let cont = 0;
 let dateMembers = [];
 const yearOne = [];
+let entries4Year = []
 exports.run = async(client, message) => {
 
+
   const currentYear = getYear(new Date());
-  const initialYear = getYear(new Date(message.guild.joinedTimestamp))
+  const initialYear = getYear(new Date(message.guild.createdAt))
   let arrayYears = [];
-    for(i = initialYear; i === currentYear ; i++) {
-      arrayYears[i] = initialYear+1;
-    }
-    console.log(arrayYears)
-  
+
+  let initYear = initialYear
+
+  for(var i = 0;i<=(currentYear-initialYear);i++){
+    arrayYears[i] = initYear;
+    initYear++;
+  }
   message.guild.members.cache.map(member => {
     
     if(!member.user.bot){
@@ -26,13 +30,26 @@ exports.run = async(client, message) => {
   })
   const ordernedDates = dateMembers.sort(compareAsc);
 
-  ordernedDates.map((date, index) =>{
-    if(compareAsc(date, new Date(2018,0,1)) === -1 ){
-      yearOne[index] = format(date, 'dd.MM.yyyy');
-    }
+  arrayYears.map((year, index) => {
+    entries4Year[index] = ordernedDates.filter(date => getYear(date) === year);
   })
-  console.log(format(new Date(2018,1,1), 'dd.MM.yyyy'));
-  // console.log(yearOne)
+  // message.reply(`Entraram em 2017 ${entries4Year[0].length}, 2018 ${entries4Year[1].length}, 2019 ${entries4Year[2].length}`)
+
+  const exampleEmbed = new Discord.MessageEmbed()
+  .setTimestamp()
+  .setTitle(`${message.guild.name}`)
+  .setColor("RANDOM")
+  .setDescription(`Crescimento do servidor ${message.guild.name}`)
+  .addFields( arrayYears.map((year,index) =>{
+    return(
+      { name: `Ano: ${year}`, value: `Novos membros: ${entries4Year[index].length}`}
+    )
+  })
+		
+	)
+
+
+message.reply(exampleEmbed);
 
 
 
