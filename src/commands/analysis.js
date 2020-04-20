@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 let idMembers = [];
 let cont = 0;
 let dateMembers = [];
+let command = 0;
+let ordernedDates;
 
 exports.run = async(client, message) => {
   const currentYear = getYear(new Date());
@@ -19,27 +21,30 @@ exports.run = async(client, message) => {
     arrayYears[i] = initYear;
     initYear++;
   }
-  message.guild.members.cache.map(member => {
-    
+  message.guild.members.cache.map(member => {  
     if(!member.user.bot){
       idMembers[cont] = member.user.id;
       cont++;
     }
   })
   idMembers.map((id, index) =>{
+    cont = 0;
     dateMembers[index] = new Date(message.guild.members.cache.get(id).joinedTimestamp);
   })
-  const ordernedDates = dateMembers.sort(compareAsc);
-
+    ordernedDates = dateMembers.sort(compareAsc);
 
   const args = message.content.slice(1).split(' ');
+
+  if(args.length === 1){
+    message.reply('O comando +analysis permite obter informações detalhadas sobre o crescimento do servidor. Utilize-o somado a "anual", para obter uma análise em nível anual. Ou "mensal ANO_DESEJADO" para obter dados sobre um ano em específico')
+  }
   
   if(args.length >= 2){
+
     switch (args[1]){
       case 'mensal':
         if(args[2]){
           const countYears = arrayYears.length;
-
           if(args[2] > arrayYears[countYears-1] || args[2] < arrayYears[0]){
             message.reply('Ano selecionado não consta na base de dados')
           } else{
@@ -66,7 +71,6 @@ exports.run = async(client, message) => {
         break;
       case 'anual':
         const entries4Year = [];
-        entries4Year.splice(0, entries4Year.length);
         arrayYears.map((year, index) => {
           entries4Year[index] = ordernedDates.filter(date => getYear(date) === year);
         })
