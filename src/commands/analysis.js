@@ -3,8 +3,6 @@ const Discord = require("discord.js");
 let idMembers = [];
 let cont = 0;
 let dateMembers = [];
-let entries4Year = []
-let entries4Month = [1];
 
 exports.run = async(client, message) => {
   const currentYear = getYear(new Date());
@@ -39,40 +37,46 @@ exports.run = async(client, message) => {
   if(args.length >= 2){
     switch (args[1]){
       case 'mensal':
-        arrayMonths.map((month, index)=>{
-          entries4Month[index] = ordernedDates.filter(date => getMonth(date) === index && getYear(date) === parseInt(args[2]));
-        })
-        const Embed1 = new Discord.MessageEmbed()
-        .setTimestamp()
-        .setTitle(`${message.guild.name}`)
-        .setColor("RANDOM")
-        .setDescription(`Contagem de novos membros por mês no ano de ${args[2]}`)
-        .addFields(arrayMonths.map((month ,index) =>{
-          return(
-            { name: `${arrayMonths[index]}`, value: `${entries4Month[index].length}`, inline:true}
+        if(args[2]){
+          const entries4Month = [];
+          arrayMonths.map((month, index)=>{
+            entries4Month[index] = ordernedDates.filter(date => getMonth(date) === index && getYear(date) === parseInt(args[2]));
+          })
+          const mensalEmbed = new Discord.MessageEmbed()
+          .setTimestamp()
+          .setTitle(`${message.guild.name}`)
+          .setColor("RANDOM")
+          .setDescription(`Contagem de novos membros por mês no ano de ${args[2]}`)
+          .addFields(arrayMonths.map((month ,index) =>{
+            return(
+              { name: `${arrayMonths[index]}`, value: `${entries4Month[index].length}`, inline:true}
+            )
+          })
           )
-        })
-        )
-        message.reply(Embed1);
+          message.reply(mensalEmbed);
+
+        } else{
+          message.reply('Digite o ano desejado! O comando é : +analysis mensal ANO_ESCOLHIDO')
+        }
         break;
-
-
       case 'anual':
+        const entries4Year = [];
+        entries4Year.splice(0, entries4Year.length);
         arrayYears.map((year, index) => {
           entries4Year[index] = ordernedDates.filter(date => getYear(date) === year);
         })
-        const Embed2 = new Discord.MessageEmbed()
+        const anualEmbed = new Discord.MessageEmbed()
         .setTimestamp()
         .setTitle(`${message.guild.name}`)
         .setColor("RANDOM")
         .setDescription(`Crescimento do servidor ${message.guild.name}`)
         .addFields(arrayYears.map((year,index) =>{
           return(
-            { name: `${year}`, value: `${entries4Year[index].length}`, inline:true}
+            {name: `${year}`, value: `${entries4Year[index].length}`, inline:true}
           )
         })
         )
-        message.reply(Embed2);
+        message.reply(anualEmbed);
         break;
     }
   }
