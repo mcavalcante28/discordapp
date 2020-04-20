@@ -38,23 +38,28 @@ exports.run = async(client, message) => {
     switch (args[1]){
       case 'mensal':
         if(args[2]){
-          const entries4Month = [];
-          arrayMonths.map((month, index)=>{
-            entries4Month[index] = ordernedDates.filter(date => getMonth(date) === index && getYear(date) === parseInt(args[2]));
-          })
-          const mensalEmbed = new Discord.MessageEmbed()
-          .setTimestamp()
-          .setTitle(`${message.guild.name}`)
-          .setColor("RANDOM")
-          .setDescription(`Contagem de novos membros por mês no ano de ${args[2]}`)
-          .addFields(arrayMonths.map((month ,index) =>{
-            return(
-              { name: `${arrayMonths[index]}`, value: `${entries4Month[index].length}`, inline:true}
-            )
-          })
-          )
-          message.reply(mensalEmbed);
+          const countYears = arrayYears.length;
 
+          if(args[2] > arrayYears[countYears-1] || args[2] < arrayYears[0]){
+            message.reply('Ano selecionado não consta na base de dados')
+          } else{
+            const entries4Month = [];
+            arrayMonths.map((month, index)=>{
+              entries4Month[index] = ordernedDates.filter(date => getMonth(date) === index && getYear(date) === parseInt(args[2]));
+            })
+            const mensalEmbed = new Discord.MessageEmbed()
+            .setTimestamp()
+            .setTitle(`${message.guild.name}`)
+            .setColor("RANDOM")
+            .setDescription(`Contagem de novos membros por mês no ano de ${args[2]}`)
+            .addFields(arrayMonths.map((month ,index) =>{
+              return(
+                { name: `${arrayMonths[index]}`, value: `${entries4Month[index].length}`, inline:true}
+              )
+            })
+            )
+            message.reply(mensalEmbed);
+          }
         } else{
           message.reply('Digite o ano desejado! O comando é : +analysis mensal ANO_ESCOLHIDO')
         }
