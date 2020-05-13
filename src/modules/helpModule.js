@@ -8,7 +8,7 @@ const helpAnalysis = [
 
 const helpAnalysisDescription = [
   'Verify the quantity of members that enter in this server this month.\nEx.: +analysis m',
-  'Verify the quantity of members that enter in this server in a specif month of some year.\nEx.: +analysis feb 2020',
+  'Verify the quantity of members that enter in this server in a specif month of some year.\nEx.: +analysis m 2020',
   'Verify the quantity of members that enter in this server on each year .\nEx.: +analysis y',
 ];
 

@@ -1,4 +1,4 @@
-const { format, getMonth, compareAsc, getYear } = require('date-fns');
+const { getMonth, compareAsc, getYear } = require('date-fns');
 const Discord = require('discord.js');
 
 const helpModule = require('../modules/helpModule.js');
@@ -85,7 +85,7 @@ exports.run = async (client, message) => {
               .setColor('FF0000')
               .setDescription(`Contagem de novos membros no ano de ${args[2]}:`)
               .addFields(
-                arrayMonths.map((month, index) => {
+                arrayMonths.map((_, index) => {
                   return {
                     name: `${arrayMonths[index]}`,
                     value: `${entries4Month[index].length}`,
@@ -100,9 +100,7 @@ exports.run = async (client, message) => {
             .setTimestamp()
             .setTitle(`${message.guild.name}`)
             .setColor('FF0000')
-            .setDescription(
-              `Contagem de novos membros no mês:`
-            )
+            .setDescription(`Contagem de novos membros no mês:`)
             .addFields({
               name: `${arrayMonths[currentMonth]}`,
               value: `${arrayMonths[currentMonth].length}`,
