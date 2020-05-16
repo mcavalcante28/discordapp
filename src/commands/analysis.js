@@ -58,7 +58,7 @@ exports.run = async (client, message) => {
 
   if (args.length === 1) {
     message.reply(
-      'O comando +analysis permite obter informações detalhadas sobre o crescimento do servidor. Digite +analysis h, para maiores informações.\nEx.: +analysis h'
+      'O comando `+analysis` permite obter informações detalhadas sobre o crescimento do servidor. Digite `analysis h`, para maiores informações.\nEx.: +analysis h'
     );
   }
 
@@ -68,7 +68,7 @@ exports.run = async (client, message) => {
         if (args[2]) {
           const countYears = arrayYears.length;
           if (args[2] > arrayYears[countYears - 1] || args[2] < arrayYears[0]) {
-            message.reply(' o ano selecionado não consta na base de dados!');
+            message.reply('O ano selecionado não consta na base de dados!');
           } else {
             const entries4Month = [];
             arrayMonths.map((month, index) => {
@@ -133,9 +133,7 @@ exports.run = async (client, message) => {
         message.reply(anualEmbed);
         break;
       case 'h':
-        const helpEmbed = helpModule.helpAnalysisFunction(
-          message.guild.name.toString()
-        );
+        const helpEmbed = helpModule.helpAnalysisFunction();
         message.reply(helpEmbed);
         break;
       default:
